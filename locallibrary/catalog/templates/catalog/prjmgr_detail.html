@@ -1,0 +1,20 @@
+<!--This is the html template for the project manager detail view.-->
+
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Project Manager: {{ prjmgr.first_name }} {{ prjmgr.last_name }}</h1> <!--Show first and last name.-->
+    <p><strong>Date of birth:</strong> {{ prjmgr.date_of_birth }}</p> <!--Show date of birth.-->
+      <p><strong>Date joined:</strong> {{ prjmgr.date_joined}}</p> <!--Show date joined company.-->
+    <h2>Project List:</h2>
+
+  <div style="margin-left:20px;margin-top:20px">
+    <h4>Projects</h4>
+
+    {% for project in prjmgr.project_set.all %} <!--For each project in the project managers set.-->
+        <dt><a href="{{ project.get_absolute_url }}">Project# {{ project.prj_num }} Project Mgr: {{project.prj_mgr}}</a></dt>
+        <dd>{{ project.summary }}</dd> <!--Show project info as link to project detail.-->
+    {% endfor %}
+  </div>
+{% endblock %}
+

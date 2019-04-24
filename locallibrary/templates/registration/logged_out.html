@@ -1,0 +1,7 @@
+<!--This is a simple html template for a standardized django logged out screen.-->
+
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <a href="{% url 'login'%}">Click here to login again.</a>
+{% endblock %}

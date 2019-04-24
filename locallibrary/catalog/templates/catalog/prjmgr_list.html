@@ -1,0 +1,16 @@
+<!--This is the html template for the project manager list view.-->
+
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Project Manager List</h1>
+  {% if prjmgr_list %}
+      {% for prjmgr in prjmgr_list %}<!--For each project manager show name as link to project list view.-->
+      <li>
+        <a href="{{ prjmgr.get_absolute_url }}">{{ prjmgr.last_name }}, {{prjmgr.first_name}}</a>
+      </li>
+      {% endfor %}
+  {% else %}
+    <p>There are no project managers in the system.</p>
+  {% endif %}       
+{% endblock %}

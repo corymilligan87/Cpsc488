@@ -1,0 +1,18 @@
+<!--This is the html template for the home page view.-->
+
+{% extends "base_generic.html" %}
+
+{% block content %}
+ <h1>ResReq Home</h1> <!--Title information.-->
+
+  <h2>Dynamic content</h2>
+  <p>The system has the following summary information:</p>
+  <ul>
+    <li><strong>Projects:</strong> {{ num_projects }}</li> <!--Summary information.-->
+    <li><strong>Items:</strong> {{ num_items }}</li>
+    <li><strong>Items available:</strong> {{ num_items_available }}</li>
+    <li><strong>Project Managers:</strong> {{ num_project_managers }}</li>
+  </ul>
+
+  <p>You have visited this page {{ num_visits }}{% if num_visits == 1 %} time{% else %} times{% endif %}.</p>
+{% endblock %}

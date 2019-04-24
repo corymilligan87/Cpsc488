@@ -1,0 +1,21 @@
+<!--This is the html template for the project detail view.-->
+
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Project: {{ project.title }}</h1> <!--Show project details.-->
+  <p><strong>Project Manager:</strong> <a href="{% url 'prjmgr-detail' project.prj_mgr.pk %}">{{ project.prj_mgr }}</a>
+    <p><strong>Date Created:</strong> {{ project.date_created }}</p>
+    <p><strong>Summary:</strong> {{ project.summary }}</p>
+
+  <div style="margin-left:20px;margin-top:20px">
+    <h4>Items</h4>
+
+    {% for item in project.item_set.all %} <!--For each item in the project.-->
+      <hr>
+      <p class="{% if item.status == 'A' %}text-success{% elif item.status == 'R' %}text-danger{% else %}text-warning{% endif %}">{{ item.get_status_display }}</p>
+      <p><strong>Noted:</strong> {{item.notes}}</p> <!--Show item details.-->
+      <p class="text-muted"><strong>Id:</strong> {{item.item_num}}</p>
+    {% endfor %}
+  </div>
+{% endblock %}

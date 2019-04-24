@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Project: {{ self.prj_num }}</h1>
+  <p>Project Manager: {{ self.prj_mgr }}</p>
+  <p>Completion date: {{ self.completion_date }}</p>
+    
+  <form action="" method="post">
+    {% csrf_token %}
+    <table>
+    {{ form.as_table }}
+    </table>
+    <input type="submit" value="Submit">
+  </form>
+{% endblock %}

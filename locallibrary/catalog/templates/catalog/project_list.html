@@ -1,0 +1,17 @@
+<!--This is the html template for the project list view.-->
+
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Project List</h1>
+  {% if project_list %}
+  <dl>
+    {% for project in project_list %} <!--For each project in the system.-->
+        <dt><a href="{{ project.get_absolute_url }}">Project# {{ project.prj_num }} - Project Mgr: {{project.prj_mgr}}</a></dt>
+        <dd>{{ project.summary }}</dd> <!--Show summary details with as link to detail view.-->
+    {% endfor %}
+  </dl>
+  {% else %}
+    <p>There are no projects in the system.</p>
+  {% endif %}
+{% endblock %}

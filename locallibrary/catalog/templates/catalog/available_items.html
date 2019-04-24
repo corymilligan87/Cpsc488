@@ -1,0 +1,21 @@
+<!--This is the html template for the assigned_items view.-->
+
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Available Items</h1>
+
+    {% if item_list %}
+    <ul>
+
+      {% for item in item_list %} <!--Show details for each item available item.-->
+      <li>
+        <a href="{% url 'project-detail' item.prj.prj_num %} ">Project# {{item.prj.prj_num}} - Item# {{ item.item_num }} - Status: {{ item.status }}</a>
+      </li>
+      {% endfor %}
+    </ul>
+
+    {% else %}
+      <p>There are no items assigned.</p>
+    {% endif %}       
+{% endblock %}
