@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Assigned Projects</title>
+</head>
+<body>
+{% block content %}
+    <h1>Assigned Projects</h1>
+
+    {% if project_list %}
+        <ul>
+
+            {% for prj in project_list %}
+                <li class="{% if prj.prj_status == 'Behind Schedule' %}text-danger{% endif %}">
+                    <a href="{% url 'project-detail' prj.pk %}">{{ proj.prj_num }}</a>
+                    ({{ prj.completion_date }} - {{ prj.prj_status }})
+                </li>
+            {% endfor %}
+        </ul>
+
+    {% else %}
+        <p>There are no Projects in the system.</p>
+    {% endif %}
+{% endblock %}
+</body>
+</html>

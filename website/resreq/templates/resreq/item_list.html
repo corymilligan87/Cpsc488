@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Item List</title>
+</head>
+<body>
+{% block content %}
+    {{ form|crispy }}
+    <h1>Item List</h1>
+    {% if item_list %}
+        <ul>
+            {% for item in item_list %}
+                <li>
+                    <a href="{{ item.get_absolute_url }}">{{ item }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>There are no items in the system.</p>
+    {% endif %}
+{% endblock %}
+</body>
+</html>

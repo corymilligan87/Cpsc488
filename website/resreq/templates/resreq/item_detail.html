@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Item Detail</title>
+</head>
+<body>
+{% block content %}
+    {{ form|crispy }}
+    <h3>Item Number: {{ item.item_num }}</h3>
+    <hr>
+    <p class="{% if item.status == 'Available' %}text-success{% elif item.status == 'Deployed' %}text-danger{% else %}text-warning{% endif %}">{{ item.status }}</p>
+    <p><strong>Project Info:</strong> {{ item.prj }}</p>
+    <p><strong>Item Description:</strong> {{ item.description }}</p>
+    <p><strong>Inventory Sector:</strong> {{ item.sector }}</p>
+    <p><strong>Notes:</strong> {{ item.notes }}</p>
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project List</title>
+</head>
+<body>
+{% block content %}
+    <h1>Project List</h1>
+    {% if project_list %}
+        <ul>
+            {% for project in project_list %}
+                <li>
+                    <a href="{{ project.get_absolute_url }}">{{ project }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>There are no projects in the system.</p>
+    {% endif %}
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project: {{ project }}</title>
+</head>
+<body>
+{% block content %}
+    <h2>Project Number: {{ project.prj_num }}</h2>
+    <p><strong>Project Manager:</strong> <a
+            href="{% url 'prjmgr-detail' project.prj_mgr.pk %}">{{ project.prj_mgr }}</a>
+    <p><strong>Project Status:</strong> {{ project.prj_status }}</p>
+    <p><strong>Project Summary:</strong> {{ project.summary }}</p>
+    <p><strong>Date Created:</strong> {{ project.date_created }}</p>
+    <p><strong>Estimated Completion Date:</strong> {{ project.completion_date }}</p>
+
+    <div style="margin-left:20px;margin-top:20px">
+        <h4>Items</h4>
+
+        {% for i in project.item_set.all %}
+            <hr>
+            <p class="text-muted"><strong>Item Number:</strong> {{ i.item_num }}</p>
+            <p><strong>Item Description:</strong> {{ i.description }}</p>
+            <p><strong>Inventory Sector:</strong> {{ i.sector }}</p>
+            <p class="{% if i.status == 'Available' %}text-success{% elif i.status == 'Deployed' %}text-danger{% else %}text-warning{% endif %}">{{ i.status }}</p>
+            <p><strong>Notes:</strong> {{ i.notes }}</p>
+        {% endfor %}
+    </div>
+{% endblock %}
+</body>
+</html>
+
+

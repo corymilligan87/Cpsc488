@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project Form</title>
+</head>
+<body>
+{% block content %}
+    <h1>Create a New Project</h1>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-success">Submit</button>
+    </form>
+{% endblock %}
+</body>
+</html>

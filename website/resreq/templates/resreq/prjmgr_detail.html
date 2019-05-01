@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PrjMgr Detail</title>
+</head>
+<body>
+{% block content %}
+    <h1>Project Manager: {{ prjmgr.first_name }} {{ prjmgr.last_name }}</h1>
+    <p><strong>Title:</strong> {{ prjmgr.role }} </p>
+    <p><strong>Employee ID:</strong> {{ prjmgr.emp_num }} </p>
+    <p><strong>Number of Projects:</strong> {{ prjmgr.project_set.count }}</p>
+    {% for proj in prjmgr.project_set.all %}
+        <hr>
+        <p><a href="{{ project.get_absolute_url }}">{{ proj }}</a></p>
+        <p><strong>Summary:</strong> {{ proj.summary }}</p>
+    {% endfor %}
+{% endblock %}
+</body>
+</html>

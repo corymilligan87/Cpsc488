@@ -1,0 +1,122 @@
+{% load crispy_forms_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block title %}<title>ResReq</title>{% endblock %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    {% load static %}  <!-- Additional CSS in static file -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-sm-2">
+            {% block sidebar %}
+                <ul class="sidebar-nav">
+                    {% if user.is_authenticated %}
+                        <li>
+                            <form class="form-inline my-2 my-lg-0">
+                                <input class="form-control mr-sm-2"
+                                       type="search"
+                                       placeholder="Search"
+                                       aria-label="Search"
+                                       name="search"
+                                >
+                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                            </form>
+                        </li>
+                        <li>
+                            <form action="{% url 'index' %}">
+                                <button type="submit" class="btn btn-success">Home</button>
+                            </form>
+                        </li>
+                        <li>
+                            <form action="{% url 'items' %}">
+                                <button type="submit" class="btn btn-success">All Items</button>
+                            </form>
+                        </li>
+                        <li>
+                            <form action="{% url 'projects' %}">
+                                <button type="submit" class="btn btn-success">All Projects</button>
+                            </form>
+                        </li>
+                        <li>
+                            <form action="{% url 'prjmgrs' %}">
+                                <button type="submit" class="btn btn-success">All PrjMgrs</button>
+                            </form>
+                        </li>
+                        <li>
+                            <form action="{% url 'my-assigned' %}">
+                                <button type="submit" class="btn btn-success">My Projects</button>
+                            </form>
+                        </li>
+                        </ul>
+                        <ul class="sidebar-nav">
+                        <li>User: {{ user.get_username }}</li>
+                        <li>
+                            <form action="{% url 'logout' %}?next={% url 'logout' %}">
+                                <button type="submit" class="btn btn-success">Log Out</button>
+                            </form>
+                        </li>
+                    {% endif %}
+                    </ul>
+                <ul class="sidebar-nav">
+                    {% if user.is_staff %}
+                        <li>Staff Links</li>
+                        <li>
+                            <form action="{% url 'all-assigned' %}">
+                                <button type="submit" class="btn btn-success">Assigned Projects</button>
+                            </form>
+                        </li>
+                        <li>
+                            <form action="{% url 'prjmgr-create' %}">
+                                <button type="submit" class="btn btn-success">New ProjMgr</button>
+                            </form>
+                        </li>
+                        <li>
+                            <form action="{% url 'project-create' %}">
+                                <button type="submit" class="btn btn-success">New Project</button>
+                            </form>
+                        </li>
+                        <li>
+                            <form action="{% url 'item-create' %}">
+                                <button type="submit" class="btn btn-success">New Item</button>
+                            </form>
+                        </li>
+                        <li>
+                            <form action="{% url 'history' %}">
+                                <button type="submit" class="btn btn-success">System History</button>
+                            </form>
+                        </li>
+                    {% endif %}
+                </ul>
+            {% endblock %}
+
+        </div>
+        <div class="col-sm-10 ">{% block content %}{% endblock %}
+            {% block pagination %}
+                {% if is_paginated %}
+                    <div class="pagination">
+            <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">Previous</a>
+                {% endif %}
+                <span class="page-current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">   Next</a>
+                {% endif %}
+            </span>
+                    </div>
+                {% endif %}
+            {% endblock %} </div>
+    </div>
+</div>
+</body>
+</html>

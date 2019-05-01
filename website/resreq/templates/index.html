@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ResReq Home</title>
+</head>
+<body>
+{% block content %}
+    <h1>ResReq Resource Request System</h1>
+    <h2>Current Summary Data</h2>
+    <p>The system has the following summary counts:</p>
+    <ul>
+        <li><strong>Projects:</strong> {{ num_projects }}</li>
+        <li><strong>Projects Overdue:</strong> {{ num_projects_overdue }}</li>
+        <li><strong>Items:</strong> {{ num_items }}</li>
+        <li><strong>Items available:</strong> {{ num_items_available }}</li>
+        <li><strong>Project Managers:</strong> {{ num_prjmgrs }}</li>
+    </ul>
+
+    <p>You have visited this page {{ num_visits }}{% if num_visits == 1 %} time{% else %} times{% endif %}.</p>
+{% endblock %}

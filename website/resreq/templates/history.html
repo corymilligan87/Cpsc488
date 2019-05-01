@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>History</title>
+</head>
+<body>
+{% block content %}
+    <h1>Project History </h1>
+    {% if proj_history %}
+        <ul>
+            {% for proj in proj_history %}
+                <li>{{ proj }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>There are no project changes in the history.</p>
+    {% endif %}
+
+    <h1>Item History </h1>
+    {% if item_history %}
+        <ul>
+            {% for item in item_history %}
+                <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>There are no item changes in the system.</p>
+    {% endif %}
+{% endblock %}
