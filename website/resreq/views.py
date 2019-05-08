@@ -13,6 +13,7 @@ from resreq.forms import RescheduleProjectForm
 from resreq.models import Project, PrjMgr, Item
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from .filters import ItemFilter, ProjectFilter, PrjMgrFilter
 
 
 def index(request):
@@ -20,9 +21,9 @@ def index(request):
 
     # Generate counts of some of the main objects
     num_projects = Project.objects.all().count()
-    num_projects_overdue = Project.objects.filter(prj_status__exact='B').count()
+    num_projects_overdue = Project.objects.filter(prj_status__exact='Behind Schedule').count()
     num_items = Item.objects.all().count()
-    num_items_available = Item.objects.filter(status__exact='A').count()
+    num_items_available = Item.objects.filter(status__exact='Available').count()
     num_prjmgrs = PrjMgr.objects.count()
     num_visits = request.session.get('num_visits', 0)
     request.session['num_visits'] = num_visits + 1
@@ -40,10 +41,13 @@ def index(request):
     return render(request, 'index.html', context=context)
 
 
+class HistoryListView(LoginRequiredMixin, generic.ListView):
+    model = Item.history
+    paginate_by = 10
+
+
 def history(request):
     """View function for history page of site."""
-
-    # Generate counts of some of the main objects
     proj_history = Project.history.all()
     item_history = Item.history.all()
 
@@ -53,61 +57,67 @@ def history(request):
     }
 
     # Render the HTML template index.html with the data in the context variable
-    return render(request, 'history.html', context=context)
+    return render(request, 'resreq/history.html', context=context)
 
 
-class ProjectListView(generic.ListView):
+class ProjectSearchView(LoginRequiredMixin, generic.ListView):
+    model = Project
+    template_name = 'resreq/project_search.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filter'] = ProjectFilter(self.request.GET, queryset=self.get_queryset())
+        return context
+
+
+class ProjectListView(LoginRequiredMixin, generic.ListView):
     model = Project
     paginate_by = 10
 
 
-class ProjectDetailView(generic.DetailView):
+class ProjectDetailView(LoginRequiredMixin, generic.DetailView):
     model = Project
+    paginate_by = 1
 
 
-class PrjMgrListView(generic.ListView):
+class PrjMgrSearchView(LoginRequiredMixin, generic.ListView):
+    model = PrjMgr
+    template_name = 'resreq/prjmgr_search.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filter'] = PrjMgrFilter(self.request.GET, queryset=self.get_queryset())
+        return context
+
+
+class PrjMgrListView(LoginRequiredMixin, generic.ListView):
     model = PrjMgr
     paginate_by = 10
 
 
-class PrjMgrDetailView(generic.DetailView):
+class PrjMgrDetailView(LoginRequiredMixin, generic.DetailView):
     model = PrjMgr
+    paginate_by = 1
 
 
-class ItemListView(generic.ListView):
+class ItemListView(LoginRequiredMixin, generic.ListView):
     model = Item
     paginate_by = 10
 
 
-class ItemDetailView(generic.DetailView):
+class ItemSearchView(LoginRequiredMixin, generic.ListView):
     model = Item
+    template_name = 'resreq/item_search.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filter'] = ItemFilter(self.request.GET, queryset=self.get_queryset())
+        return context
 
 
-#
-
-
-class AssignedProjectsByUserListView(LoginRequiredMixin, generic.ListView):
-    """Generic class-based view listing projects assigned to current user."""
-    model = Project
-    template_name = 'resreq/project_list_assigned_user.html'
-    paginate_by = 10
-
-    def get_queryset(self):
-        return Project.objects.all()
-
-
-class AllAssignedProjectsListView(PermissionRequiredMixin, generic.ListView):
-    permission_required = 'user.is_staff'
-    """Generic class-based view listing all projects assigned to project managers."""
-    model = Project
-    template_name = 'resreq/project_list_assigned_all.html'
-    paginate_by = 10
-
-    def get_queryset(self):
-        return Project.objects.all()
-
-
-##
+class ItemDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Item
+    paginate_by = 1
 
 
 @permission_required('user.is_staff')
@@ -146,46 +156,55 @@ def reschedule_project_mgmt(request, pk):
 ###
 
 
-class PrjMgrCreate(CreateView):
+class PrjMgrCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    permission_required = 'user.is_staff'
     model = PrjMgr
     fields = '__all__'
 
 
-class PrjMgrUpdate(UpdateView):
+class PrjMgrUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    permission_required = 'user.is_staff'
     model = PrjMgr
     fields = '__all__'
 
 
-class PrjMgrDelete(DeleteView):
+class PrjMgrDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    permission_required = 'user.is_staff'
     model = PrjMgr
     success_url = reverse_lazy('prjmgrs')
 
 
-class ProjectCreate(CreateView):
+class ProjectCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    permission_required = 'user.is_staff'
     model = Project
     fields = '__all__'
 
 
-class ProjectUpdate(UpdateView):
+class ProjectUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    permission_required = 'user.is_staff'
     model = Project
-    fields = ['__all__']
+    fields = '__all__'
 
 
-class ProjectDelete(DeleteView):
+class ProjectDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    permission_required = 'user.is_staff'
     model = Project
     success_url = reverse_lazy('projects')
 
 
-class ItemCreate(CreateView):
+class ItemCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    permission_required = 'user.is_staff'
     model = Item
-    fields = '__all__'
+    fields = ('prj', 'notes', 'date_added', 'status', 'sector', 'description')
 
 
-class ItemUpdate(UpdateView):
+class ItemUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    permission_required = 'user.is_staff'
     model = Item
-    fields = ['__all__']
+    fields = ('prj', 'notes', 'date_added', 'status', 'sector', 'description')
 
 
-class ItemDelete(DeleteView):
+class ItemDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    permission_required = 'user.is_staff'
     model = Item
     success_url = reverse_lazy('items')

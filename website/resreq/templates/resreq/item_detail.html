@@ -10,9 +10,21 @@
 {% block content %}
     {{ form|crispy }}
     <h3>Item Number: {{ item.item_num }}</h3>
+    {% if user.is_staff %}
+        <ul>
+            <form action="{% url 'item-update' item.item_num %}">
+                <button type="submit" class="btn btn-success">Edit Item</button>
+            </form>
+        </ul>
+    {% endif %}
     <hr>
-    <p class="{% if item.status == 'Available' %}text-success{% elif item.status == 'Deployed' %}text-danger{% else %}text-warning{% endif %}">{{ item.status }}</p>
-    <p><strong>Project Info:</strong> {{ item.prj }}</p>
+    {% if item.prj %}
+        <p><strong>Project Info: </strong><a href="{% url 'project-detail' item.prj.pk %}">{{ item.prj }}</a></p>
+    {% else %}
+        <p><strong>Project Info: </strong>This Item is not assigned to a Project .</p>
+    {% endif %}
+    <p class="{% if item.status == 'Available' %}text-success{% elif item.status == 'Deployed' %}
+    text-danger{% else %}text-warning{% endif %}">{{ item.status }}</p>
     <p><strong>Item Description:</strong> {{ item.description }}</p>
     <p><strong>Inventory Sector:</strong> {{ item.sector }}</p>
     <p><strong>Notes:</strong> {{ item.notes }}</p>

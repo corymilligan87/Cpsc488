@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>ResReq Home</title>
+    <link href="styles/style.css" rel="stylesheet">
 </head>
 <body>
 {% block content %}
@@ -19,5 +20,6 @@
         <li><strong>Project Managers:</strong> {{ num_prjmgrs }}</li>
     </ul>
 
-    <p>You have visited this page {{ num_visits }}{% if num_visits == 1 %} time{% else %} times{% endif %}.</p>
+    <!--<p>You have visited this page {{ num_visits }}{% if num_visits == 1 %} time{% else %} times{% endif %}.</p>-->
 {% endblock %}
+</body>

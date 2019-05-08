@@ -1,25 +1,28 @@
 <!DOCTYPE html>
 {% extends "base_generic.html" %}
-{% load crispy_forms_tags %}
+
+{% load crispy_forms_filters %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Project List</title>
+    <title>All Projects</title>
 </head>
 <body>
 {% block content %}
-    <h1>Project List</h1>
-    {% if project_list %}
+    <div class="container">
+        <h1>Project List</h1>
         <ul>
-            {% for project in project_list %}
-                <li>
-                    <a href="{{ project.get_absolute_url }}">{{ project }}</a>
+            {% for prj in project_list %}
+                <li class="{% if prj.prj_status == 'Behind Schedule' %}text-danger
+                    {% elif prj.prj_status == 'Complete' %}text-success
+                    {% elif prj.prj_status == 'In Progress' %}text-warning
+                    {% endif %}">
+                    <a href="{{ prj.get_absolute_url }}">{{ prj }}</a>
                 </li>
+                <h1></h1>
             {% endfor %}
         </ul>
-    {% else %}
-        <p>There are no projects in the system.</p>
-    {% endif %}
+    </div>
 {% endblock %}
 </body>
 </html>

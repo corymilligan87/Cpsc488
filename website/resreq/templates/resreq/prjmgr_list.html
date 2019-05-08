@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% extends "base_generic.html" %}
-{% load crispy_forms_tags %}
+
+{% load crispy_forms_filters %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,18 +9,15 @@
 </head>
 <body>
 {% block content %}
-    <h1>Project Manager List</h1>
-    {% if prjmgr_list %}
+    <div class="container">
+        <h1>Project Manager List</h1>
         <ul>
             {% for prjmgr in prjmgr_list %}
-                <li>
-                    <a href="{{ prjmgr.get_absolute_url }}">{{ prjmgr.first_name }} {{ prjmgr.last_name }}</a>
-                </li>
+                <li><a href="{{ prjmgr.get_absolute_url }}">{{ prjmgr }} </a></li>
+                <h1></h1>
             {% endfor %}
         </ul>
-    {% else %}
-        <p>There are no Project Managers in the system.</p>
-    {% endif %}
+    </div>
 {% endblock %}
 </body>
 </html>

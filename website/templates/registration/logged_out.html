@@ -15,18 +15,18 @@
             <p>Please login to ResReq system.</p>
         {% endif %}
     {% endif %}
+    <h1></h1>
     <form method="post" action="{% url 'login' %}">
         {% csrf_token %}
         {{ form|crispy }}
-
-        <button type="submit" class="btn btn-success">Back to Login</button>
+        <button type="submit" class="btn btn-success custom">Back to Login</button>
         <input type="hidden" name="next" value="{{ next }}"/>
     </form>
+    <h1></h1>
     <form method="post" action="{% url 'password_reset' %}">
         {% csrf_token %}
         {{ form|crispy }}
-
-        <button type="submit" class="btn btn-Danger">Reset Password</button>
+        <button type="submit" class="btn btn-danger custom">Reset Password</button>
         <input type="hidden" name="next" value="{{ next }}"/>
     </form>
 

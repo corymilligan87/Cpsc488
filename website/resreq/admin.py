@@ -17,9 +17,6 @@ class PrjMgrAdmin(admin.ModelAdmin):
     inlines = [ProjectsInline]
 
 
-admin.site.register(PrjMgr, PrjMgrAdmin)
-
-
 class ItemsInline(admin.TabularInline):
     model = Item
     extra = 0
@@ -31,4 +28,9 @@ class ProjectAdmin(admin.ModelAdmin):
     inlines = [ItemsInline]
 
 
-#admin.site.register(ProjectAdmin)
+admin.site.register(PrjMgr, PrjMgrAdmin)
+
+
+
+
+

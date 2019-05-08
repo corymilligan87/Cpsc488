@@ -1,14 +1,14 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
-import uuid  #
+import uuid
 from simple_history.models import HistoricalRecords
 
 
 class Project(models.Model):
     """Model representing a project."""
     prj_num = models.AutoField(primary_key=True)
-    prj_mgr = models.ForeignKey('PrjMgr', on_delete=models.SET_NULL, null=True, blank=True)
+    prj_mgr = models.ForeignKey('PrjMgr', related_name='projects', on_delete=models.SET_NULL, null=True, blank=True)
     summary = models.TextField(max_length=1000, help_text="Enter project description", null=True, blank=True)
     date_created = models.DateField(auto_now=True)
     completion_date = models.DateField(null=True, blank=True)
@@ -33,19 +33,21 @@ class Project(models.Model):
 
     def __str__(self):
         """String for representing the project object."""
-        return "Project Number - " + str(self.prj_num) + \
-               " - Project Manager - " + str(self.prj_mgr) + \
-               " - Status - " + str(self.prj_status)
+        return 'Prj Num: {0} -  Prj Mgr: {1} - Prj Status: {2} - Wrap Date: {3}' \
+            .format(self.prj_num,
+                    self.prj_mgr,
+                    self.prj_status,
+                    self.completion_date,
+                    )
 
 
 class Item(models.Model):
     """Model representing a specific item that can be assigned to a project."""
-    item_num = models.UUIDField(primary_key=True, default=uuid.uuid4,
-                                help_text="Unique ID for this particular item across whole library")
-    prj = models.ForeignKey('Project', on_delete=models.SET_NULL, null=True, blank=True)
-    notes = models.CharField(max_length=500, null=True)
+    item_num = models.AutoField(primary_key=True)
+    item_uuid = models.UUIDField(default=uuid.uuid4)
+    prj = models.ForeignKey('Project', related_name='items', on_delete=models.SET_NULL, null=True, blank=True)
+    notes = models.CharField(max_length=500, blank=True)
     date_added = models.DateField(null=True, blank=True)
-    borrower = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     history = HistoricalRecords()
 
     ITEM_STATUS = (
@@ -56,7 +58,7 @@ class Item(models.Model):
     status = models.TextField(
         max_length=25,
         choices=ITEM_STATUS,
-        default='Available'
+        default='Available',
     )
 
     ITEM_DESCRIPTION = (
@@ -94,13 +96,31 @@ class Item(models.Model):
         choices=ITEM_SECTOR, default='NW'
     )
 
+    def update_item_status(self):
+        """Updates status assigned to project"""
+        if self.prj:
+            self.status = 'Reserved'
+
     def get_absolute_url(self):
         """Returns the project number built in to URL for access a particular project instance."""
         return reverse('item-detail', args=[str(self.item_num)])
 
     def __str__(self):
         """String for representing the item object."""
-        return '{0} - {1} - {2} - {3}'.format(self.item_num, self.status, self.sector, self.description)
+        if not self.prj:
+            return 'Item Number: {0} -  Project Number: {1} - Status: {2} - Inventory Sector: {3} - Description: {4}' \
+                .format(self.item_num,
+                        "None",
+                        self.status,
+                        self.sector,
+                        self.description)
+        else:
+            return 'Item Number: {0} -  Project Number: {1} - Status: {2} - Inventory Sector: {3} - Description: {4}' \
+                .format(self.item_num,
+                        self.prj.prj_num,
+                        self.status,
+                        self.sector,
+                        self.description)
 
 
 class PrjMgr(models.Model):
@@ -134,4 +154,4 @@ class PrjMgr(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return '{0} {1}'.format(self.first_name, self.last_name)
+        return '{0} {1} - Role: {2} '.format(self.first_name, self.last_name, self.role, self.emp_num)

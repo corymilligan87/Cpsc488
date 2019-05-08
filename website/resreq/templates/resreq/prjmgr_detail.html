@@ -9,13 +9,20 @@
 <body>
 {% block content %}
     <h1>Project Manager: {{ prjmgr.first_name }} {{ prjmgr.last_name }}</h1>
+    {% if user.is_staff %}
+        <ul>
+            <form action="{% url 'prjmgr-update' prjmgr.emp_num %}">
+                <button type="submit" class="btn btn-success">Edit Project Manager</button>
+            </form>
+        </ul>
+    {% endif %}
     <p><strong>Title:</strong> {{ prjmgr.role }} </p>
     <p><strong>Employee ID:</strong> {{ prjmgr.emp_num }} </p>
-    <p><strong>Number of Projects:</strong> {{ prjmgr.project_set.count }}</p>
-    {% for proj in prjmgr.project_set.all %}
+    <p><strong>Number of Projects:</strong> {{ prjmgr.projects.count }}</p>
+    {% for project in prjmgr.projects.all %}
         <hr>
-        <p><a href="{{ project.get_absolute_url }}">{{ proj }}</a></p>
-        <p><strong>Summary:</strong> {{ proj.summary }}</p>
+        <p><a href="{{ project.get_absolute_url }}">{{ project }}</a></p>
+        <p><strong>Summary:</strong> {{ project.summary }}</p>
     {% endfor %}
 {% endblock %}
 </body>

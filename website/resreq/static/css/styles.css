@@ -1,16 +1,32 @@
 .divider {
     position: absolute;
-    right: -1px;
-    top: 2px;
+    right: 0px;
+    top: 0px;
 }
 
 .sidebar-nav {
-    margin-top: 20px;
     padding: 0;
     list-style: none;
 }
 
 .btn {
-    width: max-content;
+    margin: 5px;
 }
 
+.custom {
+    width: 135px;
+}
+
+.logincustom {
+    width: 150px;
+}
+
+.topbar {
+    width: 500px;
+    height: 0px;
+}
+
+body, html {
+    height: 100%;
+    background-image: url(/static/onlylogo.jpg);
+}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{% extends "base_generic.html" %}
+
+{% load crispy_forms_filters %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PrjMgr Search</title>
+</head>
+<body>
+{% block content %}
+
+    <div class="container">
+        <form method="GET">
+            {{ filter.form|crispy }}
+            <button type="submit" class="btn btn-success">Search</button>
+        </form>
+        <h1>Project Manager Search</h1>
+        <ul>
+            {% for prjmgr in filter.qs %}
+                <li>
+                    <a href="{{ prjmgr.get_absolute_url }}">{{ prjmgr }} </a>
+                </li>
+                <h1></h1>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
+</body>
+</html>

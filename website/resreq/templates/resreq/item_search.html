@@ -5,14 +5,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Item List</title>
+    <title>Item Search</title>
 </head>
 <body>
 {% block content %}
     <div class="container">
-        <h1>Item List</h1>
+        <form method="GET">
+            {{ filter.form|crispy }}
+            <button type="submit" class="btn btn-success">Search</button>
+        </form>
+        <h1>Item Search</h1>
         <ul>
-            {% for item in item_list %}
+            {% for item in filter.qs %}
                 <li class="{% if item.status == 'Deployed' %}text-danger
                     {% elif item.status == 'Available' %}text-success
                     {% elif item.status == 'Reserved' %}text-warning

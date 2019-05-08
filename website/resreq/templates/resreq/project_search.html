@@ -1,29 +1,32 @@
 <!DOCTYPE html>
 {% extends "base_generic.html" %}
-{% load crispy_forms_tags %}
+
+{% load crispy_forms_filters %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>All Assigned Projects</title>
+    <title>All Projects</title>
 </head>
 <body>
 {% block content %}
-    <h1>All Assigned Projects</h1>
-
-    {% if project_list %}
+    <div class="container">
+        <form method="GET">
+            {{ filter.form|crispy }}
+            <button type="submit" class="btn btn-success">Search</button>
+        </form>
+        <h1>Project Search</h1>
         <ul>
-            {% for prj in project_list %}
+            {% for prj in filter.qs %}
                 <li class="{% if prj.prj_status == 'Behind Schedule' %}text-danger
                     {% elif prj.prj_status == 'Complete' %}text-success
                     {% elif prj.prj_status == 'In Progress' %}text-warning
                     {% endif %}">
                     <a href="{{ prj.get_absolute_url }}">{{ prj }}</a>
                 </li>
+                <h1></h1>
             {% endfor %}
         </ul>
-    {% else %}
-        <p>There are no Projects in the system.</p>
-    {% endif %}
+    </div>
 {% endblock %}
 </body>
 </html>

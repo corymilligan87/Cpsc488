@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'resreq.apps.ResreqConfig',
     'simple_history',
     'crispy_forms',
+    'django_filters',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -121,6 +122,5 @@ STATIC_URL = '/static/'
 
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
 LOGIN_REDIRECT_URL = '/'
-# LOGOUT_REDIRECT_URL = 'django.contrib.auth.urls'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
